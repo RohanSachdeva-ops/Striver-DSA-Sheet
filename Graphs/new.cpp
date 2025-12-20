@@ -96,6 +96,7 @@ int main(){
   graph g;
   buildGraph(g);
   
-  TopoSortBFS(g.adj);cout<<endl;
+  TopoSortBFS(g.adj);
+  cout<<endl;
   TopoSort(g.adj);
 }
