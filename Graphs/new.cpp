@@ -31,30 +31,6 @@ void buildGraph(graph &g){
   }
 }
 
-
-void shortestDist(int src,vector<vector<int>>& adj){
-  int n=adj.size()-1;
-  vector<int> dist(n,INT_MAX);
-  queue<pair<int,int>> q;
-  dist[src]=0;
-  q.push({src,0});
-
-  while(!q.empty()){
-    auto front=q.front();q.pop();
-    
-    int node=front.first, d=front.second;
-
-    for(auto x:adj[node]){
-      if(dist[x] > d+1) {
-        dist[x]=d+1;
-        q.push({x,d+1});
-      }
-    }
-  }
-
-  for(auto x:dist) cout<<x<<" ";
-}
-
 int main(){
   graph g;
   buildGraph(g);
