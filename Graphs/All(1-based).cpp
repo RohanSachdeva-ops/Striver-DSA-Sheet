@@ -73,7 +73,6 @@ bool isCycle(int node, vector<vector<int>>& adj, vector<int>& vis){
   }
   return false;
 }
-
 bool isCycleDfs(int node, int parent, vector<vector<int>>& adj, vector<int>& vis, bool& flag){
   vis[node]=1;
 
@@ -86,22 +85,157 @@ bool isCycleDfs(int node, int parent, vector<vector<int>>& adj, vector<int>& vis
     }
   }
 }
+void TopoSortBFS(vector<vector<int>>& adj){
+  int n=adj.size();
+  vector<int> inDegree(n);
+
+  for(int i=0;i<n;i++){
+    for(auto it:adj[i]){
+      inDegree[it]++;
+    }
+  }
+
+  queue<int> q;
+  for(int i=0;i<n;i++){
+    if(inDegree[i]==0){
+      q.push(i);
+    }
+  }
+
+  vector<int> topoBFS;
+  while(!q.empty()){
+    auto it=q.front();q.pop();
+    topoBFS.push_back(it);
+
+    for(auto x:adj[it]){
+      inDegree[x]--;
+      if(inDegree[x]==0){
+        q.push(x);
+      }
+    }
+  }
+
+  for(auto x:topoBFS){
+    cout<<x<<" ";
+  }
+}
+
+bool isCycleDirectedBFS(vector<vector<int>>& adj){
+  int n=adj.size()-1;
+  vector<int> inDegree(n+1,0);
+
+  for(int i=1;i<=n;i++){
+    for(auto x:adj[i]){
+      inDegree[x]++;
+    }
+  }
+  queue<int> q;
+  for(int i=1;i<=n;i++){
+    if(inDegree[i]==0){
+      q.push(i);
+    }
+  }
+  vector<int> ans;
+  while(!q.empty()){
+    int front=q.front();q.pop();
+    ans.push_back(front);
+
+    for(auto x:adj[front]){
+      inDegree[x]--;
+      if(inDegree[x]==0){
+        q.push(x);
+      }
+    }
+  }
+
+  if(ans.size()!=n) return true;
+  else return false;
+}
+
+void dfsTopo(int node,vector<vector<int>>& adj, vector<int>& vis,stack<int>& st){
+  vis[node]=1;
+  for(auto x:adj[node]){
+    if(!vis[node]) dfsTopo(x,adj,vis,st);
+  }
+  st.push(node);
+}
+
+
+bool dfsCycle(int node,vector<vector<int>>& adj,vector<int>& vis, vector<int>& pathVis){
+  int n=adj.size()-1;
+
+  vis[node]=1;
+  pathVis[node]=1;
+
+  for(auto x:adj[node]){
+    if(!vis[x]){
+       if(dfsCycle(x,adj,vis,pathVis)==true){
+        return true;
+       }
+    }
+    else if(vis[x]==1 && pathVis[x]==1) return true;
+  }
+  pathVis[node]=0;
+  return false;
+}
+bool isCycleDirected(vector<vector<int>>& adj){
+  int n=adj.size()-1;
+  vector<int> vis(n+1,0);
+  vector<int> pathVis(n+1,0);
+  for(int i=1;i<=n;i++){
+    if(!vis[i]) {
+      if(dfsCycle(i,adj,vis,pathVis)==true){
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+void topoDFS(vector<vector<int>>& adj){
+  int n=adj.size()-1;
+  vector<int> vis(n+1,0);
+  stack<int> st;
+  for(int i=1;i<=n;i++){
+    if(!vis[i]) dfsTopo(i,adj,vis,st);
+  }
+  
+  vector<int> topoAns;
+  while(!st.empty()){
+    int top = st.top();st.pop();
+    topoAns.push_back(top);
+  }
+
+  for(auto x:topoAns){
+    cout<<x<<" ";
+  }
+}
+
+void shortestDist(int src,vector<vector<int>>& adj){
+  int n=adj.size()-1;
+  vector<int> dist(n,INT_MAX);
+  queue<pair<int,int>> q;
+  dist[src]=0;
+  q.push({src,0});
+
+  while(!q.empty()){
+    auto front=q.front();q.pop();
+    int node=front.first, d=front.second;
+
+    for(auto x:adj[node]){
+      if(dist[x] > d+1) {
+        dist[x]=d+1;
+        q.push({x,d+1});
+      }
+    }
+  }
+
+  for(auto x:dist) cout<<x<<" ";
+}
+
 
 int main(){
   graph g;
   buildGraph(g);
-  int n = g.adj.size()-1;
-
-  vector<int> vis(0,n+1);
-  // for(int i=1;i<n+1;i++){
-  //   if(!vis[i]){
-  //     if(isCycle(i,g.adj,vis) == true) {
-  //       cout<<"Cycle Detected";
-  //       return 0;
-  //     }
-  //   }
-  // }
-  cout<< isCycle(1,g.adj,vis);
-  return 0;
 }
 
