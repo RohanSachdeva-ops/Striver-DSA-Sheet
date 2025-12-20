@@ -23,7 +23,7 @@ class graph{
 void buildGraph(graph &g){
   int n,m;cin>>n>>m;
 
-  g.adj.resize(n);
+  g.adj.resize(n+1);
 
   for(int i=0;i<m;i++){
     int u,v;cin>>u>>v;
@@ -31,55 +31,85 @@ void buildGraph(graph &g){
   }
 }
 
-void dfs(int node,vector<vector<int>>& adj, vector<int>& vis,stack<int>& st){
+bool dfsCycle(int node,vector<vector<int>>& adj,vector<int>& vis, vector<int>& pathVis){
+  int n=adj.size()-1;
 
   vis[node]=1;
-  for(auto it:adj[node]){
-    if(!vis[it]) dfs(it,adj,vis,st);
+  pathVis[node]=1;
+
+  for(auto x:adj[node]){
+    if(!vis[x]){
+       if(dfsCycle(x,adj,vis,pathVis)==true){
+        return true;
+       }
+    }
+    else if(vis[x]==1 && pathVis[x]==1) return true;
+  }
+  pathVis[node]=0;
+  return false;
+}
+bool isCycleDirected(vector<vector<int>>& adj){
+  int n=adj.size()-1;
+  vector<int> vis(n+1,0);
+  vector<int> pathVis(n+1,0);
+  for(int i=1;i<=n;i++){
+    if(!vis[i]) {
+      if(dfsCycle(i,adj,vis,pathVis)==true){
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+void dfsTopo(int node,vector<vector<int>>& adj, vector<int>& vis,stack<int>& st){
+  vis[node]=1;
+  for(auto x:adj[node]){
+    if(!vis[node]) dfsTopo(x,adj,vis,st);
   }
   st.push(node);
 }
-void TopoSort(vector<vector<int>>& adj){
-  int n=adj.size();
+void topoDFS(vector<vector<int>>& adj){
+  int n=adj.size()-1;
+  vector<int> vis(n+1,0);
   stack<int> st;
-  vector<int> topo;
-
-  vector<int> vis(n,0);
-
-  for(int i=0;i<n;i++){
-    if(!vis[i]) dfs(i,adj,vis,st);
+  for(int i=1;i<=n;i++){
+    if(!vis[i]) dfsTopo(i,adj,vis,st);
   }
-
+  
+  vector<int> topoAns;
   while(!st.empty()){
-    auto it = st.top();st.pop();
-    topo.push_back(it);
+    int top = st.top();st.pop();
+    topoAns.push_back(top);
   }
-  for(auto x:topo) cout<<x<<" ";
+
+  for(auto x:topoAns){
+    cout<<x<<" ";
+  }
 }
 
-void TopoSortBFS(vector<vector<int>>& adj){
-  int n=adj.size();
-  vector<int> inDegree(n);
 
-  for(int i=0;i<n;i++){
-    for(auto it:adj[i]){
-      inDegree[it]++;
+bool isCycleDirectedBFS(vector<vector<int>>& adj){
+  int n=adj.size()-1;
+  vector<int> inDegree(n+1,0);
+
+  for(int i=1;i<=n;i++){
+    for(auto x:adj[i]){
+      inDegree[x]++;
     }
   }
-
   queue<int> q;
-  for(int i=0;i<n;i++){
+  for(int i=1;i<=n;i++){
     if(inDegree[i]==0){
       q.push(i);
     }
   }
-
-  vector<int> topoBFS;
+  vector<int> ans;
   while(!q.empty()){
-    auto it=q.front();q.pop();
-    topoBFS.push_back(it);
+    int front=q.front();q.pop();
+    ans.push_back(front);
 
-    for(auto x:adj[it]){
+    for(auto x:adj[front]){
       inDegree[x]--;
       if(inDegree[x]==0){
         q.push(x);
@@ -87,16 +117,15 @@ void TopoSortBFS(vector<vector<int>>& adj){
     }
   }
 
-  for(auto x:topoBFS){
-    cout<<x<<" ";
-  }
+  if(ans.size()!=n) return true;
+  else return false;
 }
+
+
 
 int main(){
   graph g;
   buildGraph(g);
   
-  TopoSortBFS(g.adj);
-  cout<<endl;
-  TopoSort(g.adj);
+  cout<<isCycleDirectedBFS(g.adj);
 }
