@@ -1,4 +1,3 @@
-/*
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -41,40 +40,39 @@ int main() {
     }
 }
 
-*/
-//optimize
-#include <bits/stdc++.h>
-using namespace std;
+// //optimize
+// #include <bits/stdc++.h>
+// using namespace std;
 
-void backtrack(int i,vector<int>& v, vector<vector<int>>& ans){
-  if(i == v.size()){
-    ans.push_back(v);
-    return;
-  } 
+// void backtrack(int i,vector<int>& v, vector<vector<int>>& ans){
+//   if(i == v.size()){
+//     ans.push_back(v);
+//     return;
+//   } 
 
-  for(int idx=i;idx<v.size();idx++){
+//   for(int idx=i;idx<v.size();idx++){
 
-    swap(v[idx],v[i]);
-    backtrack(i+1,v,ans);
+//     swap(v[idx],v[i]);
+//     backtrack(i+1,v,ans);
     
-    swap(v[idx],v[i]);
-  }
-}
+//     swap(v[idx],v[i]);
+//   }
+// }
 
-int main() {
-    int n;cin>>n;
-    vector<int> v(n);
-    vector<vector<int>> ans;
-    for (int i = 0; i < n; i++) {
-        cin >> v[i];
-    }
+// int main() {
+//     int n;cin>>n;
+//     vector<int> v(n);
+//     vector<vector<int>> ans;
+//     for (int i = 0; i < n; i++) {
+//         cin >> v[i];
+//     }
 
-    backtrack(0,v,ans);
+//     backtrack(0,v,ans);
 
-    for(auto x:ans){
-      for(auto e:x){
-        cout<<e<<" ";
-      }
-      cout<<endl;
-    }
-}
+//     for(auto x:ans){
+//       for(auto e:x){
+//         cout<<e<<" ";
+//       }
+//       cout<<endl;
+//     }
+// }

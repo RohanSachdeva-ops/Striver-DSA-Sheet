@@ -1,51 +1,64 @@
 #include<bits/stdc++.h>
 using namespace std;
-
 int main(){
   int n,m;cin>>n>>m;
-  vector<vector<int>> grid(n, vector<int> (m,0));
-  vector<vector<int>> dist(n, vector<int> (m,INT_MAX));
+  vector<vector<pair<int,int>>> adj(n);
 
-  for(int i=0;i<n;i++){
-    for(int j=0;j<m;j++){
-      cin>>grid[i][j];
-    }
+  for(int i=0;i<m;i++)
+  {
+    int u,v,w;
+    cin>>u>>v>>w;
+    adj[u].push_back({v,w});
+    adj[v].push_back({u,w});
+
   }
 
-priority_queue<
-    pair<int, pair<int,int>>,
-    vector<pair<int, pair<int,int>>>,
-    greater<pair<int, pair<int,int>>>
-> pq;
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+    vector<int> dist(n,INT_MAX);
+    int src=0;
+    
 
-  pq.push({0, {0,0}});
-  dist[0][0]=0;
+    int count=0;
+    
+    dist[src]=0;  
+    pq.push({0,src});
+    while(!pq.empty()){
+      auto it = pq.top();pq.pop();
+      int node=it.second;
+      int dis=it.first;
 
-  vector<int> delrow = {-1,1,0,0};
-  vector<int> delcol = {0,0,-1,1};
+      for(auto x:adj[node]){
+        int v=x.first;
+        int vw=x.second;
 
-  while(!pq.empty()){
-    auto it = pq.top();pq.pop();
-    int dis = it.first;
-    int row = it.second.first;
-    int col = it.second.second;
-
-    if(row==n-1 && col==m-1){
-       cout << dis;
-       return 0;
-    }
-
-    for(int i=0;i<4;i++){
-      int nr = row+delrow[i];
-      int nc = col+delcol[i];
-
-      if(nr>=0 && nc>=0 && nc<m && nr<n){
-        int newEffort = max(abs(grid[row][col] - grid[nr][nc]), dis);
-        if(newEffort < dist[nr][nc]){
-          dist[nr][nc]=newEffort;
-          pq.push({newEffort, {nr,nc}});
+        if(dis+vw < dist[v]){
+          dist[v]=dis+vw;
+          pq.push({dist[v],v});
         }
       }
     }
-  }
+
+
+    int req=dist[n-1];
+   vector<int> dist2(n,INT_MAX);
+   queue<pair<int,int>> q;
+
+    dist2[src]=0;  
+    q.push({0,src});
+    while(!q.empty()){
+      auto it = q.front();q.pop();
+      int node=it.second;
+      int dis=it.first;
+
+      for(auto x:adj[node]){
+        int v=x.first;
+        int vw=x.second;
+        if(dis+vw <= dist2[v]){
+          dist2[v]=dis+vw;
+          q.push({dist2[v],v});
+        }
+      }
+    }
+
+    cout<<count;
 }

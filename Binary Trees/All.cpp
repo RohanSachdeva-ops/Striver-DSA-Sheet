@@ -42,6 +42,7 @@ void preOrder(node* root){
   preOrder(root->left);
   preOrder(root->right);
 }
+
 //by stack
 void preOrder2(node* root){
   vector<int> preorder;
@@ -83,8 +84,8 @@ void postOrder2(node* root){
     st1.pop();
     st2.push(root);
 
-    if(root->left != NULL)st1.push(root->left);
-    if(root->right != NULL)st1.push(root->right);
+    if(root->left != NULL) st1.push(root->left);
+    if(root->right != NULL) st1.push(root->right);
   }
   while(!st2.empty()){
     node* top = st2.top();
@@ -107,7 +108,8 @@ void postOrder3(node* root){
     if(curr != NULL){
       st.push(curr);
       curr=curr->left;
-    }else{
+    }
+    else{
       node* temp=st.top()->right;
       if(temp==NULL){
         temp=st.top();
@@ -262,6 +264,7 @@ void PreInPost(node* root){
   for(auto x:in) cout<<x<<" ";cout<<endl;
   for(auto x:post) cout<<x<<" ";cout<<endl;
 }
+
 
 //SIMPLE CONCEPTUAL QUESTIONS
 int MaxDepth(node* root){
@@ -619,6 +622,7 @@ void leftViewPrinter(node* root){
 
 
 int main(){
-  node* root = buildTree(root);
-  leftViewPrinter(root);
+  node* root = NULL;
+  root = buildTree(root);
+  inOrder(root);
 }
