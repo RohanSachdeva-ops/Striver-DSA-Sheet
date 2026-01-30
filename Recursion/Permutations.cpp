@@ -23,7 +23,8 @@ void backtrack(vector<int>& v,vector<int>& temp, unordered_map<int,int>& m, vect
 
 int main() {
     int n;cin>>n;
-    vector<int> v(n),temp;vector<vector<int>> ans;
+    vector<int> v(n),temp;
+    vector<vector<int>> ans;
     unordered_map<int,int> m;
     for (int i = 0; i < n; i++) {
         cin >> v[i];
