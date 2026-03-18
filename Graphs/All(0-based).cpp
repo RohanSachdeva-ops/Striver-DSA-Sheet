@@ -62,9 +62,9 @@ int main(){
   graph g;
   buildGraph(g);
 
-  g.printAdjList();
-  // vector<int> v = bfs(g.adj);
-  // for(auto x:v) cout<<x<<" ";
+  // g.printAdjList();
+  vector<int> v = bfs(g.adj);
+  for(auto x:v) cout<<x<<" ";
   return 0;
 }
 

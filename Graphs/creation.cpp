@@ -20,7 +20,7 @@ class graph{
       for(auto i:adj){
         cout<<i.first<<"->";
         for(auto j:i.second){
-          cout<<j<<", ";
+          cout<<j<<" ";
         }
         cout<<endl;
       }
@@ -38,9 +38,10 @@ void buildGraph(graph g){
 }
 
 int main(){
-  cout<<"Enter the number of nodes and edges repectively ";
+  // cout<<"Enter the number of nodes and edges repectively ";
   graph g;
   buildGraph(g);
   
+  g.printAdjList();
   return 0;
 }
