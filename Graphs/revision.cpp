@@ -2,6 +2,8 @@
 using namespace std;
 
 using ll = long long;
+using p = pair<int,int>;
+using pp = pair<int,pair<int,int>>;
 #define endl '\n'
 #define pb push_back
 
@@ -217,6 +219,7 @@ void ShortestDistanceUndirectedUnitWeight(){
         }
 }
 
+//No cycles allowed otherwise Djikstra's Algorithm
 void topoSort(int node,vector<vector<pair<int,int>>>& adj,vector<int>& vis,stack<int>& st){
     vis[node]=1;
     for(auto x:adj[node]){
@@ -260,9 +263,152 @@ void ShortestDistanceInDAG(){
     }
 }
 
+//Djiktra's Algo
+void ShortestDistanceUndirectedGraphByPriorityQueue(){
+  int n,m;cin>>n>>m;
+  vector<vector<pair<int,int>>> adj(n);
+  for(int i=0;i<m;i++){
+    int u,v,w;cin>>u>>v>>w;
+    adj[u].push_back({v,w});
+    adj[v].push_back({u,w});
+  }
+
+  int src;cin>>src;
+  
+  priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+  vector<int> dist(n,INT_MAX);
+
+  dist[src]=0;
+  pq.push({0,src});
+
+  while(!pq.empty()){
+    int dis = pq.top().first;
+    int node = pq.top().second;
+    pq.pop();
+
+    for(auto x:adj[node]){
+      int v = x.first;
+      int vw = x.second;
+
+      if(dis+vw < dist[v]){
+         dist[v]=dis+vw;
+         pq.push({dist[v],v});
+      }
+    }
+  }
+
+  for(auto x:dist) cout<<x<<" ";
+}
+void ShortestDistanceUndirectedGraphBySets(){
+  int n,m;cin>>n>>m;
+  vector<vector<pair<int,int>>> adj(n);
+  for(int i=0;i<m;i++){
+    int u,v,w;cin>>u>>v>>w;
+    adj[u].push_back({v,w});
+    adj[v].push_back({u,w});
+  }
+
+  int src;cin>>src;
+
+  vector<int> dist(n,INT_MAX);
+  set<pair<int,int>>st;
+
+  dist[src]=0;
+  st.insert({0, src});
+
+  while(!st.empty()){
+    auto it = *(st.begin());
+    int dis = it.first;
+    int node=it.second;
+
+    st.erase(it);
+    for(auto x:adj[node]){
+      int v = x.first;
+      int vw = x.second;
+
+      if(dis+vw < dist[v]){
+        if(dist[v] != INT_MAX){
+          st.erase({dist[v],v});
+        }
+
+        dist[v]=dis+vw;
+        st.insert({dist[v],v});
+        
+      }
+    }
+  }
+
+  for(auto x:dist) cout<<x<<" ";
+}
+
+
+void floydWarshall(vector<vector<int>> &dist) {
+    int n=dist.size();
+    for(int via=0;via<n;via++){
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(dist[i][via] != 1e8 && dist[via][j]!=1e8)
+                dist[i][j] = min(dist[i][j], dist[i][via]+dist[via][j]);
+            }
+        }
+    }
+
+    for(int i=0;i<n;i++){
+        if(dist[i][i]<0) cout << "NEGETIVE CYCLE\n";
+    }
+}
+
+
+//Minimum Spanning Tree
+// 1. Prims Algorithm
+
+void primsAlgo(){
+  int n,m;cin>>n>>m;
+  vector<vector<pair<int,int>>> adj(n);
+  for(int i=0;i<m;i++){
+    int u,v,w;cin>>u>>v>>w;
+    adj[u].push_back({v,w});
+    adj[v].push_back({u,w});
+  }
+  vector<pair<int,int>> mst;
+  //assuming starting point is 0
+  int sum=0;
+  priority_queue<pp,vector<pp>,greater<pp>> pq;
+  vector<int> vis(n,0);
+  //{weight,node,parent}
+  pq.push({0,{0,-1}});
+
+  while(!pq.empty()){
+    auto it = pq.top();pq.pop();
+
+    int node=it.second.first;
+    int parent=it.second.second;
+    int wt=it.first;
+
+    if(vis[node] == 1) continue;
+    vis[node]=1;
+    sum += wt;
+
+    if(parent != -1) mst.push_back({node,parent});
+
+    for(auto x:adj[node]){
+        int adjacentNode = x.first;
+        int weight = x.second;
+
+        if(!vis[adjacentNode]){
+            pq.push({weight, {adjacentNode,node}});
+        }
+    }
+  }
+
+  cout << sum << endl;
+  for(auto x:mst) cout << x.first <<" "<<x.second<<endl;
+}
+
+
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    
-    // ShortestDistance();
+    primsAlgo();    
 }

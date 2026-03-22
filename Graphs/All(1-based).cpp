@@ -52,7 +52,6 @@ int numberOfProvinces(vector<vector<int>>& adj,vector<int> vis){
 bool isCycle(int node, vector<vector<int>>& adj, vector<int>& vis){
   int n=adj.size()-1;
  
-
   queue<pair<int,int>> q;
   q.push({node,-1});
   vis[node]=1;
@@ -67,8 +66,6 @@ bool isCycle(int node, vector<vector<int>>& adj, vector<int>& vis){
       }else{
         if(x != prev) return true;
       }
-
-      
     }
   }
   return false;
@@ -85,6 +82,8 @@ bool isCycleDfs(int node, int parent, vector<vector<int>>& adj, vector<int>& vis
     }
   }
 }
+
+
 void TopoSortBFS(vector<vector<int>>& adj){
   int n=adj.size();
   vector<int> inDegree(n);
