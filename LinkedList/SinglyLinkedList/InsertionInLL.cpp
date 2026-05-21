@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+1#include <bits/stdc++.h>
 using namespace std;
 
 class node{
@@ -108,8 +108,8 @@ int main() {
     node* head = convertArr2LL(arr);
     // head = insertK(head, 100, 3);
     // head = insertBeforeValue(head, 100, 5);
-    printLL(head);
-    cout<<endl;
+    // printLL(head);
+    // cout<<endl;
 
     return 0;
 }

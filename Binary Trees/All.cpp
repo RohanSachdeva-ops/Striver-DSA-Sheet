@@ -20,10 +20,7 @@ node* buildTree(node* root){
   int data;cin>>data;
   root = new node(data);
 
-  if(data==-1){
-    return NULL;
-  }
-
+  if(data==-1) return NULL;
   // cout<<"Enter the data left side of "<<data<<endl;
   root->left = buildTree(root->left);
   // cout<<"Enter the data right side of "<<data<<endl;
@@ -624,5 +621,5 @@ void leftViewPrinter(node* root){
 int main(){
   node* root = NULL;
   root = buildTree(root);
-  inOrder(root);
+  postOrder(root);
 }
