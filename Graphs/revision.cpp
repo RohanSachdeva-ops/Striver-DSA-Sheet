@@ -261,7 +261,6 @@ void ShortestDistanceUndirectedUnitWeight()
     }
 
     vector<int> dist(n, INT_MAX);
-    dist[src] = 0;
     queue<int> q;
     q.push(src);
     dist[src] = 0;
@@ -291,18 +290,36 @@ void ShortestDistanceUndirectedUnitWeight()
 }
 
 // No cycles allowed otherwise Djikstra's Algorithm
-void topoSort(int node, vector<vector<pair<int, int>>> &adj, vector<int> &vis, stack<int> &st)
-{
+void dfsTopo(int node, vector<int> adj[], vector<int>& vis, vector<int>& topo) {
     vis[node] = 1;
-    for (auto x : adj[node])
-    {
-        if (!vis[x.first])
-        {
-            topoSort(x.first, adj, vis, st);
+
+    for (auto it : adj[node]) {
+        if (!vis[it]) {
+            dfs(it, adj, vis, topo);
         }
     }
-    st.push(node);
+
+    // push after visiting neighbors
+    topo.push_back(node);
 }
+
+
+vector<int> topoSortDFS(int V, vector<int> adj[]) {
+    vector<int> vis(V, 0);
+    vector<int> topo;
+
+    for (int i = 0; i < V; i++) {
+        if (!vis[i]) {
+            dfsTopo(i, adj, vis, topo);
+        }
+    }
+
+    reverse(topo.begin(), topo.end());
+
+    return topo;
+}
+
+
 void ShortestDistanceInDAG()
 {
     int n, m, src;
