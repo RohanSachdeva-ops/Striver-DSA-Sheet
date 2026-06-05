@@ -30,6 +30,8 @@ int query(int ind,int low,int high,int l,int r){
   return left+right;
 }
 
+
+
 int main() {
      int n;cin>>n;
      for (int i = 0; i < n; i++) {

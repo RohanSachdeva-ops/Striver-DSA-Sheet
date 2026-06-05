@@ -30,5 +30,5 @@ int main(){
         }
     }
     if(lcs != s2) cout << false << endl;
-    
+
 }
