@@ -14,7 +14,6 @@ void build(int ind, int low, int high){
   build(2*ind+2 , mid+1,high);
   seg[ind] = (seg[2*ind+1]+seg[2*ind+2]);
 }
-
 int query(int ind,int low,int high,int l,int r){
   if(high < l || low > r){
     return 0;
@@ -29,7 +28,6 @@ int query(int ind,int low,int high,int l,int r){
   int right = query(2*ind+2,mid+1,high,l,r);
   return left+right;
 }
-
 void update(int ind,int low,int high,int i,int val){
   if(low == high){
     seg[ind] = val;
@@ -41,6 +39,7 @@ void update(int ind,int low,int high,int i,int val){
 
   seg[ind] = (seg[2*ind+1]+seg[2*ind+2]);
 }
+
 int main() {
      int n;cin>>n;
      for (int i = 0; i < n; i++) {
