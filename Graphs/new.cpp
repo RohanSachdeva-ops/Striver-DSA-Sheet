@@ -1,64 +1,46 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
-int main(){
-  int n,m;cin>>n>>m;
-  vector<vector<pair<int,int>>> adj(n);
 
-  for(int i=0;i<m;i++)
-  {
-    int u,v,w;
-    cin>>u>>v>>w;
-    adj[u].push_back({v,w});
-    adj[v].push_back({u,w});
+bool dfs(int node,vector<vector<int>>& graph,vector<int>& color){
+ 
+  for(auto x:graph[node]){
+    if(color[x]==-1){
+      if(color[node] == 0) color[x] = 1;
+      else color[x]=0;
+
+      if(!dfs(x,graph,color)){
+        return false;
+      }
+    } 
+
+    else if(color[node] == color[x]){
+      return false;
+    }
 
   }
-
-    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
-    vector<int> dist(n,INT_MAX);
-    int src=0;
-    
-
-    int count=0;
-    
-    dist[src]=0;  
-    pq.push({0,src});
-    while(!pq.empty()){
-      auto it = pq.top();pq.pop();
-      int node=it.second;
-      int dis=it.first;
-
-      for(auto x:adj[node]){
-        int v=x.first;
-        int vw=x.second;
-
-        if(dis+vw < dist[v]){
-          dist[v]=dis+vw;
-          pq.push({dist[v],v});
-        }
+  return true;
+}
+int main() {
+  int n;cin>>n;
+   vector<vector<int>> graph(n);
+    for(int i=0;i<n;i++){
+      int m;cin>>m;
+      vector<int> temp(m);
+      for(int j=0;j<m;j++){
+        cin>>temp[j];
       }
+      graph[i] = temp;
     }
-
-
-    int req=dist[n-1];
-   vector<int> dist2(n,INT_MAX);
-   queue<pair<int,int>> q;
-
-    dist2[src]=0;  
-    q.push({0,src});
-    while(!q.empty()){
-      auto it = q.front();q.pop();
-      int node=it.second;
-      int dis=it.first;
-
-      for(auto x:adj[node]){
-        int v=x.first;
-        int vw=x.second;
-        if(dis+vw <= dist2[v]){
-          dist2[v]=dis+vw;
-          q.push({dist2[v],v});
+    vector<int> color(n,-1);
+    for(int i=0;i<n;i++){
+        if(color[i] == -1){
+          color[i] = 1;
+          if(!dfs(i,graph,color)){
+            cout << "NO\n";
+            return 0;
+          }
         }
-      }
     }
-
-    cout<<count;
+    cout << "YES\n";
+    return 0;
 }

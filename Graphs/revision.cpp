@@ -290,12 +290,12 @@ void ShortestDistanceUndirectedUnitWeight()
 }
 
 // No cycles allowed otherwise Djikstra's Algorithm
-void dfsTopo(int node, vector<int> adj[], vector<int>& vis, vector<int>& topo) {
+void dfsTopo(int node, vector<vector<int>>& adj, vector<int>& vis, vector<int>& topo) {
     vis[node] = 1;
 
     for (auto it : adj[node]) {
         if (!vis[it]) {
-            dfs(it, adj, vis, topo);
+            dfsTopo(it, adj, vis, topo);
         }
     }
 
@@ -304,11 +304,19 @@ void dfsTopo(int node, vector<int> adj[], vector<int>& vis, vector<int>& topo) {
 }
 
 
-vector<int> topoSortDFS(int V, vector<int> adj[]) {
-    vector<int> vis(V, 0);
+void topoSortDFS() {
+    int n,m;cin>>n>>m;
+    vector<int> vis(n, 0);
     vector<int> topo;
 
-    for (int i = 0; i < V; i++) {
+    vector<vector<int>> adj(n);
+
+    for(int i=0;i<m;i++){
+        int u,v;cin>>u>>v;
+        adj[u].push_back(v);
+    }
+
+    for (int i = 0; i < n; i++) {
         if (!vis[i]) {
             dfsTopo(i, adj, vis, topo);
         }
@@ -316,7 +324,8 @@ vector<int> topoSortDFS(int V, vector<int> adj[]) {
 
     reverse(topo.begin(), topo.end());
 
-    return topo;
+    for(auto x:topo) cout << x << " ";
+    cout << endl;
 }
 
 
