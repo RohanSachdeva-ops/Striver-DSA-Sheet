@@ -11,10 +11,10 @@ struct node{
     left=NULL;
     right=NULL;
   }
-  node(int val,node* left1, node* right1){
+  node(int val,node* left, node* right){
     data=val;
-    left=left1;
-    right=right1;
+    left=left;
+    right=right;
   }
 };
 
@@ -24,11 +24,4 @@ int main(){
     root->right = new node(3);
 
     root->left->right = new node(5);
-
-    /*
-            1--3
-            |
-            2--5
-
-    */
 }
