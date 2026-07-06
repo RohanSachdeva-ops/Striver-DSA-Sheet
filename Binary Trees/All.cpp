@@ -481,7 +481,7 @@ void boundaryTranversal(node *root)
       ans.push_back(curr1->data);
 
     if (curr1->left == NULL)
-      curr1 = curr1->right;
+      curr1 = curr1->right;01
     else
       curr1 = curr1->left;
   }
