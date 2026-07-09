@@ -495,11 +495,59 @@ int count_all_nodes(node* root){
 
   return 1 + count_all_nodes(root->left) + count_all_nodes(root->right);
 }
+
+node* build(vector<int>& pre,vector<int>& in, int preStart, int preEnd, int inStart,int inEnd, unordered_map<int,int>& inMap){
+
+  if((preStart > preEnd) || (inStart > inEnd)) return NULL;
+
+  node* root = new node(pre[preStart]);
+  int inRoot = inMap[pre[preStart]];
+  int newCount = inRoot - inStart;
+
+  root->left = build(pre,in,preStart+1,preStart+newCount, inStart, inRoot-1,inMap);
+
+  root->right = build(pre,in,preStart+newCount+1,preEnd,inRoot+1,inEnd,inMap);
+
+  return root;
+}
+
+node* construct_BT_pre_in(vector<int>& pre, vector<int>& in){
+  unordered_map<int,int> inMap;
+  for(int i=0;i<in.size();i++){
+    inMap[in[i]] = i;
+  }
+  node* root = build(pre,in,0,pre.size()-1, 0,in.size()-1,inMap);
+  return root;
+}
+node* construct_BT_post_in(vector<int>& po, vector<int>& in){
+  unordered_map<int,int> inMap;
+  for(int i=0;i<in.size();i++){
+    inMap[in[i]] = i;
+  }
+  node* root = build1(po,in,0,po.size()-1, 0,in.size()-1,inMap);
+  return root;
+}
+
+
+node* build1(vector<int>& po,vector<int>& in, int poStart, int poEnd, int inStart,int inEnd, unordered_map<int,int>& inMap){
+
+  if((poStart > poEnd) || (inStart > inEnd)) return NULL;
+
+  node* root = new node(po[poEnd]);
+  int inRoot = inMap[po[poEnd]];
+  int newCount = inEnd - inRoot;
+  
+  root->right = build1(po,in,poEnd-newCount,poEnd-1,inRoot+1,inEnd,inMap);
+
+  root->left = build1(po,in,poStart,poEnd-newCount-1, inStart, inRoot-1,inMap);
+
+
+  return root;
+}
+
 int main()
 {
   node* root = NULL;
   root = buildTree(root);
-  
-  node* src = location_finder(root,2);
   
 }
