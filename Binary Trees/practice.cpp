@@ -84,6 +84,7 @@ int isBalanced2Helper(node *root)
 }
 
 int maxi = 0;
+// diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the root.
 int diameter(node *root)
 {
   if (root == NULL)
@@ -549,5 +550,9 @@ int main()
 {
   node* root = NULL;
   root = buildTree(root);
+
+  vector<int> pre = {1,2,4,5,3};
+  vector<int> in = {4,2,5,1,3};
+  root = construct_BT_pre_in(pre, in);
   
 }

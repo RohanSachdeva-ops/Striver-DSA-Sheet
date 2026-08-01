@@ -17,8 +17,7 @@ public:
   }
 };
 
-node *buildTree(node *root)
-{
+node *buildTree(node *root){
   // cout<<"Enter the data: "<<endl;
   int data;
   cin >> data;
@@ -62,6 +61,7 @@ void preOrder2(node *root)
     preorder.push_back(top->data);
     if (top->right != NULL)
       st.push(top->right);
+      
     if (top->left != NULL)
       st.push(top->left);
   }
