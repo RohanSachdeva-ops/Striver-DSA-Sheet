@@ -94,7 +94,7 @@ void dfs2()
 
     stack<int> st;
     st.push(node);
-    vis[node]=1;
+    vis[node] = 1;
     vector<int> dfsv;
     while (!st.empty())
     {
@@ -105,7 +105,7 @@ void dfs2()
         {
             if (!vis[x])
             {
-                vis[x]=1;
+                vis[x] = 1;
                 st.push(x);
             }
         }
@@ -290,44 +290,57 @@ void ShortestDistanceUndirectedUnitWeight()
 
 // Topological Sort
 // 1. Kahn's Algorithm (BFS)
-void topoSortKahn() {
-    int n,m;cin>>n>>m;
+void topoSortKahn()
+{
+    int n, m;
+    cin >> n >> m;
     vector<int> indegree(n, 0);
     vector<vector<int>> adj(n);
 
-    for(int i=0;i<m;i++){
-        int u,v;cin>>u>>v;
+    for (int i = 0; i < m; i++)
+    {
+        int u, v;
+        cin >> u >> v;
         adj[u].push_back(v);
         indegree[v]++;
     }
 
     queue<int> q;
-    for(int i=0;i<n;i++){
-        if(indegree[i]==0) q.push(i);
+    for (int i = 0; i < n; i++)
+    {
+        if (indegree[i] == 0)
+            q.push(i);
     }
 
     vector<int> topo;
-    while(!q.empty()){
+    while (!q.empty())
+    {
         auto it = q.front();
         q.pop();
         topo.push_back(it);
 
-        for(auto x:adj[it]){
+        for (auto x : adj[it])
+        {
             indegree[x]--;
-            if(indegree[x]==0) q.push(x);
+            if (indegree[x] == 0)
+                q.push(x);
         }
     }
 
-    for(auto x:topo) cout << x << " ";
+    for (auto x : topo)
+        cout << x << " ";
     cout << endl;
 }
 
 // 2. DFS Based Topological Sort
-void topoSort(int node, vector<vector<pair<int,int>>>& adj, vector<int>& vis, stack<int>& st) {
+void topoSort(int node, vector<vector<pair<int, int>>> &adj, vector<int> &vis, stack<int> &st)
+{
     vis[node] = 1;
 
-    for (auto it : adj[node]) {
-        if (!vis[it.first]) {
+    for (auto it : adj[node])
+    {
+        if (!vis[it.first])
+        {
             topoSort(it.first, adj, vis, st);
         }
     }
@@ -335,12 +348,14 @@ void topoSort(int node, vector<vector<pair<int,int>>>& adj, vector<int>& vis, st
     // push after visiting neighbors
     st.push(node);
     vector<int> topo;
-    while (!st.empty()) {
+    while (!st.empty())
+    {
         topo.push_back(st.top());
         st.pop();
     }
 
-    for (auto x : topo) cout << x << " ";
+    for (auto x : topo)
+        cout << x << " ";
 }
 
 // No cycles allowed otherwise Djikstra's Algorithm
@@ -348,58 +363,60 @@ void topoSort(int node, vector<vector<pair<int,int>>>& adj, vector<int>& vis, st
 bool bipartite_graph_detection(int node, vector<vector<int>> &graph, vector<int> &color)
 {
 
-  for (auto x : graph[node])
-  {
-    if (color[x] == -1)
+    for (auto x : graph[node])
     {
-      if (color[node] == 0)
-        color[x] = 1;
-      else
-        color[x] = 0;
+        if (color[x] == -1)
+        {
+            if (color[node] == 0)
+                color[x] = 1;
+            else
+                color[x] = 0;
 
-      if (!bipartite_graph_detection(x, graph, color))
-      {
-        return false;
-      }
-    }
+            if (!bipartite_graph_detection(x, graph, color))
+            {
+                return false;
+            }
+        }
 
-    else if (color[node] == color[x])
-    {
-      return false;
+        else if (color[node] == color[x])
+        {
+            return false;
+        }
     }
-  }
-  return true;
+    return true;
 }
-void bipartite_graph_helper(){
+void bipartite_graph_helper()
+{
     int n;
-  cin >> n;
-  vector<vector<int>> graph(n);
-  for (int i = 0; i < n; i++)
-  {
-    int m;
-    cin >> m;
-    vector<int> temp(m);
-    for (int j = 0; j < m; j++)
+    cin >> n;
+    vector<vector<int>> graph(n);
+    for (int i = 0; i < n; i++)
     {
-      cin >> temp[j];
+        int m;
+        cin >> m;
+        vector<int> temp(m);
+        for (int j = 0; j < m; j++)
+        {
+            cin >> temp[j];
+        }
+        graph[i] = temp;
     }
-    graph[i] = temp;
-  }
-  vector<int> color(n, -1);
-  for (int i = 0; i < n; i++)
-  {
-    if (color[i] == -1)
+
+    vector<int> color(n, -1);
+    for (int i = 0; i < n; i++)
     {
-      color[i] = 1;
-      if (bipartite_graph_detection(i, graph, color) == false)
-      {
-        cout << "NO\n";
-        return;
-      }
+        if (color[i] == -1)
+        {
+            color[i] = 1;
+            if (bipartite_graph_detection(i, graph, color) == false)
+            {
+                cout << "NO\n";
+                return;
+            }
+        }
     }
-  }
-  cout << "YES\n";
-  return;
+    cout << "YES\n";
+    return;
 }
 
 // Shortest Distance in Directed Acyclic Graph (DAG)
@@ -547,55 +564,67 @@ void ShortestDistanceUndirectedGraphBySets()
         cout << x << " ";
 }
 
-void bellmanFord(){
-    
-    int n,m,src;
+void bellmanFord()
+{
+
+    int n, m, src;
     cin >> n >> m >> src;
     vector<vector<int>> edges;
-    for(int i=0;i<m;i++){
-        int u,v,w;cin>>u>>v>>w;
-        edges.push_back({u,v,w});
+    for (int i = 0; i < m; i++)
+    {
+        int u, v, w;
+        cin >> u >> v >> w;
+        edges.push_back({u, v, w});
     }
 
-    vector<int> dist(n,1e8);
+    vector<int> dist(n, 1e8);
     dist[src] = 0;
 
-    for(int i=0;i<n-1;i++){
-        for(auto it:edges){
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (auto it : edges)
+        {
             int u = it[0];
             int v = it[1];
             int w = it[2];
 
-            if(dist[u] != 1e8 && dist[u]+w < dist[v]){
-                dist[v] = dist[u]+w;
+            if (dist[u] != 1e8 && dist[u] + w < dist[v])
+            {
+                dist[v] = dist[u] + w;
             }
         }
     }
 
     // check for negative cycle
-    for(auto it:edges){
+    for (auto it : edges)
+    {
         int u = it[0];
         int v = it[1];
         int w = it[2];
 
-        if(dist[u] != 1e8 && dist[u]+w < dist[v]){
+        if (dist[u] != 1e8 && dist[u] + w < dist[v])
+        {
             cout << "Negative Cycle\n";
             return;
         }
     }
 
-    for(auto x:dist) cout << x << " ";
+    for (auto x : dist)
+        cout << x << " ";
 }
-void floydWarshall(vector<vector<int>> & edges){
-    
+void floydWarshall(vector<vector<int>> &edges)
+{
+
     int n = edges.size();
     vector<vector<int>> dist(n, vector<int>(n, 1e8));
 
-    for(int i=0;i<n;i++){
+    for (int i = 0; i < n; i++)
+    {
         dist[i][i] = 0;
     }
 
-    for(auto it:edges){
+    for (auto it : edges)
+    {
         int u = it[0];
         int v = it[1];
         int w = it[2];
@@ -603,25 +632,33 @@ void floydWarshall(vector<vector<int>> & edges){
         dist[u][v] = w;
     }
 
-    for(int via=0;via<n;via++){
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-                if(dist[i][via] != 1e8 && dist[via][j] != 1e8){
-                    dist[i][j] = min(dist[i][j], dist[i][via]+dist[via][j]);
+    for (int via = 0; via < n; via++)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (dist[i][via] != 1e8 && dist[via][j] != 1e8)
+                {
+                    dist[i][j] = min(dist[i][j], dist[i][via] + dist[via][j]);
                 }
             }
         }
     }
 
-    for(int i=0;i<n;i++){
-        if(dist[i][i] < 0){
+    for (int i = 0; i < n; i++)
+    {
+        if (dist[i][i] < 0)
+        {
             cout << "Negative Cycle\n";
             return;
         }
     }
 
-    for(auto x:dist){
-        for(auto y:x){
+    for (auto x : dist)
+    {
+        for (auto y : x)
+        {
             cout << y << " ";
         }
         cout << endl;
@@ -706,7 +743,7 @@ void primsAlgo()
         cout << x.first << " " << x.second << endl;
 }
 
-// we use Djikstra when 
+// we use Djikstra when
 
 int main()
 {

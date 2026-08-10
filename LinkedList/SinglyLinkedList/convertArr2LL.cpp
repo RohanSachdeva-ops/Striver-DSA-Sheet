@@ -25,7 +25,7 @@ node* convertArr2LL(vector<int>& arr){
 
   for(int i=1;i<arr.size();i++){
     node* temp = new node(arr[i]);
-    mover->next =temp;
+    mover->next = temp;
     mover = temp;
   }
 

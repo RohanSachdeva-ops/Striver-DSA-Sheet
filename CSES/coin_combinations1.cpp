@@ -1,21 +1,41 @@
 #include <bits/stdc++.h>
 using namespace std;
-const long long mod = 1e9 + 7.;
-int main() {
-    long long n,x;cin>>n>>x;
-    vector<int> c(n);
-    for (int i = 0; i < n; i++) {
-        cin >> c[i];
+
+int f(int s, vector<int>& coins){
+    int n = coins.size();
+    if(s == 0) return 1;    
+    if(s<0) return 0;
+
+    int number_of_ways = 0;
+    for(int i=0;i<n;i++){
+        if(s-coins[i]>=0) number_of_ways += (f(s-coins[i], coins));
     }
-    sort(c.begin(), c.end());
-    vector<long long> dp(x+1);
-    dp[0]=1;
-    for(int s=0;s<=x;s++){
+
+    return number_of_ways;
+}
+
+int main()
+{
+    long long n, target;
+    cin >> n >> target;
+    vector<int> coins(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> coins[i];
+    }
+    sort(coins.begin(),coins.end());
+
+    vector<long long> dp(target + 1, 0);
+    dp[0] = 1;
+
+    // dp[s] = number of ways to make sum 's'
+
+    for (int s = 1; s <= target; s++){
         for(int i=0;i<n;i++){
-            if(c[i] > s) break;
-            if(s-c[i] >= 0) dp[s] = (dp[s]+dp[s-c[i]])%mod;
+            if(s < coins[i]) break;
+            if(s >= coins[i]) dp[s] += dp[s-coins[i]];
         }
     }
 
-    cout << dp[x] << endl;
+    cout << dp[target] << endl;
 }
