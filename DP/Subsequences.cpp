@@ -1,71 +1,30 @@
 #include <bits/stdc++.h>
 using namespace std;
+
+int f(int i, int s,vector<int>& arr,vector<vector<int>>& dp){
+    if(s==0) return 1;
+    if(i==0) return (arr[i]==s);
+
+    if(dp[i][s]!=-1) return dp[i][s];
+
+    int pick=0,notpick=0;
+    notpick=f(i-1, s, arr,dp);
+    if(arr[i]<=s){
+        pick = f(i-1,s-arr[i],arr,dp);
+    }
+
+    return dp[i][s]=pick+notpick;
+}
+
 int main() {
-   int n,diff;cin>>n>>diff;
+   int n,target;cin>>n>>target;
    vector<int> arr(n);
    for (int i = 0;i < n; i++) {
        cin >> arr[i];
     }
-    int sum=accumulate(arr.begin(),arr.end(),0);
-
-    if(sum<diff || (sum-diff)%2 !=0){
-        cout<<0<<endl;
-        return 0;
-    }
-
-    int target = (sum-diff)/2;
-
-    vector<vector<int>> dp(n, vector<int> (target+1,0));
-    if (arr[0] == 0) {
-        dp[0][0] = 2;   // pick or not pick
-    } else {
-        dp[0][0] = 1;   // not pick
-        if (arr[0] <= target)
-            dp[0][arr[0]] = 1;  // pick
-    }
-    
-    for(int i=1;i<n;i++){
-        for(int k=0;k<=target;k++){
-            int pick=0,notpick=0;
-            notpick = dp[i-1][k];
-
-            if(arr[i]<=k){
-                pick = dp[i-1][k-arr[i]];
-            }
-
-            dp[i][k]=notpick+pick;
-        }
-    }
-
-    cout<<dp[n-1][target]<<endl;
+    vector<vector<int>> dp(n, vector<int> (target+1,-1));
+    cout<< f(n-1, target,arr,dp); 
 }
-// #include <bits/stdc++.h>
-// using namespace std;
-
-// int f(int i, int s,vector<int>& arr,vector<vector<int>>& dp){
-//     if(s==0) return 1;
-//     if(i==0) return (arr[i]==s);
-
-//     if(dp[i][s]!=-1) return dp[i][s];
-
-//     int pick=0,notpick=0;
-//     notpick=f(i-1, s, arr,dp);
-//     if(arr[i]<=s){
-//         pick = f(i-1,s-arr[i],arr,dp);
-//     }
-
-//     return dp[i][s]=pick+notpick;
-// }
-
-// int main() {
-//    int n,target;cin>>n>>target;
-//    vector<int> arr(n);
-//    for (int i = 0;i < n; i++) {
-//        cin >> arr[i];
-//     }
-//     vector<vector<int>> dp(n, vector<int> (target+1,-1));
-//     cout<< f(n-1, target,arr,dp); 
-// }
 
 // //NUMBER OF SUBSEQUENCES HAVING SUM 'sum'
 // #include <bits/stdc++.h>
